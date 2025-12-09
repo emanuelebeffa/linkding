@@ -65,6 +65,9 @@ urlpatterns = [
     ),
     path("settings/import", views.settings.bookmark_import, name="settings.import"),
     path("settings/export", views.settings.bookmark_export, name="settings.export"),
+    path(
+        "settings/list-models", views.settings.list_models, name="settings.list_models"
+    ),
     # Toasts
     path("toasts/acknowledge", views.toasts.acknowledge, name="toasts.acknowledge"),
     # API

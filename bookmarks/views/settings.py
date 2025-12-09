@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import prefetch_related_objects
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
@@ -23,6 +23,7 @@ from bookmarks.models import (
 )
 from bookmarks.services import exporter, tasks
 from bookmarks.services import importer
+from bookmarks.services.ai_auto_tagger import list_ai_models, is_ai_auto_tagging_enabled
 from bookmarks.type_defs import HttpRequest
 from bookmarks.utils import app_version
 
@@ -297,3 +298,29 @@ def _find_message_with_tag(messages, tag):
     for message in messages:
         if message.extra_tags == tag:
             return message
+
+
+@login_required
+def list_models(request: HttpRequest):
+    """
+    List available AI models for the current user's configuration.
+    Returns JSON response with model list or error message.
+    """
+    # Check if AI auto-tagging is enabled
+    if not is_ai_auto_tagging_enabled(request.user):
+        return JsonResponse(
+            {"error": "To list models, enable AI auto-tagging first"}, status=400
+        )
+
+    try:
+        profile = request.user.profile
+        api_key = profile.ai_api_key.strip() if profile.ai_api_key else "apikey"
+        base_url = profile.ai_base_url.strip() if profile.ai_base_url else None
+
+        models = list_ai_models(api_key, base_url)
+        model_ids = [model.id for model in models.data]
+
+        return JsonResponse({"models": model_ids})
+    except Exception as e:
+        logger.error(f"Error listing AI models: {e}", exc_info=True)
+        return JsonResponse({"error": f"Failed to fetch models: {str(e)}"}, status=500)
