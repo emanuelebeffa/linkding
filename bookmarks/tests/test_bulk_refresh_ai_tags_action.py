@@ -3,7 +3,6 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.urls import reverse
 
-from bookmarks.services import bookmarks
 from bookmarks.tests.helpers import BookmarkFactoryMixin
 
 

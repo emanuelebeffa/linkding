@@ -1,12 +1,11 @@
 import logging
-from typing import List, Optional, Tuple
 
 from django.contrib.auth.models import User
 from openai import (
-    OpenAI,
-    APIError,
     APIConnectionError,
+    APIError,
     AuthenticationError,
+    OpenAI,
     RateLimitError,
 )
 from pydantic import BaseModel, Field
@@ -19,7 +18,7 @@ logger = logging.getLogger(__name__)
 class TagSuggestions(BaseModel):
     """Pydantic model for structured outputs"""
 
-    tags: List[str] = Field(
+    tags: list[str] = Field(
         description="List of relevant tags from the allowed vocabulary"
     )
 
@@ -47,7 +46,7 @@ def is_ai_auto_tagging_enabled(user: User) -> bool:
     return has_api_key and has_vocabulary and has_model
 
 
-def parse_tag_vocabulary(vocabulary_text: str) -> List[str]:
+def parse_tag_vocabulary(vocabulary_text: str) -> list[str]:
     """
     Parse newline-separated tag vocabulary into a list of normalized tags.
 
@@ -72,7 +71,7 @@ def parse_tag_vocabulary(vocabulary_text: str) -> List[str]:
     return tags
 
 
-def get_ai_tags(bookmark: Bookmark, user: User) -> List[str]:
+def get_ai_tags(bookmark: Bookmark, user: User) -> list[str]:
     """
     Get AI-suggested tags for a bookmark using structured outputs.
 
@@ -95,7 +94,7 @@ def get_ai_tags(bookmark: Bookmark, user: User) -> List[str]:
             return []
 
         # Build prompt with bookmark metadata
-        system_prompt = f"""
+        system_prompt = """
 You are a tag-assignment assistant. Your job is to map a single bookmark (URL, title, description) to the most relevant tags only from the provided allowed-tags list. Follow these rules exactly:
 - Only choose tags from the allowed_tags list. Do not invent or modify tags. Output tag names exactly as they appear in allowed_tags.
 - Return tags ordered from most relevant to least relevant.
@@ -176,7 +175,7 @@ Allowed tags: {", ".join(allowed_tags)}
         return []
 
 
-def list_ai_models(api_key: str, base_url: Optional[str] = None):
+def list_ai_models(api_key: str, base_url: str | None = None):
     """
     List available AI models.
 
@@ -195,8 +194,8 @@ def list_ai_models(api_key: str, base_url: Optional[str] = None):
 
 
 def validate_api_key(
-    api_key: str, base_url: Optional[str] = None
-) -> Tuple[bool, Optional[str]]:
+    api_key: str, base_url: str | None = None
+) -> tuple[bool, str | None]:
     """
     Validate an AI API key by making a test request. Skips validation if a custom base_url is provided.
 

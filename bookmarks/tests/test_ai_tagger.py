@@ -1,15 +1,14 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from django.test import TestCase
-from openai import AuthenticationError, RateLimitError, APIError
+from openai import APIError, AuthenticationError
 
-from bookmarks.models import UserProfile
 from bookmarks.services.ai_auto_tagger import (
+    TagSuggestions,
+    get_ai_tags,
     is_ai_auto_tagging_enabled,
     parse_tag_vocabulary,
-    get_ai_tags,
     validate_api_key,
-    TagSuggestions,
 )
 from bookmarks.tests.helpers import BookmarkFactoryMixin
 

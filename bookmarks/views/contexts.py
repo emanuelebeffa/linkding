@@ -18,6 +18,7 @@ from bookmarks.models import (
     User,
     UserProfile,
 )
+from bookmarks.services.ai_auto_tagger import is_ai_auto_tagging_enabled
 from bookmarks.services.search_query_parser import (
     OrExpression,
     SearchQueryParseError,
@@ -27,7 +28,6 @@ from bookmarks.services.search_query_parser import (
 from bookmarks.services.wayback import generate_fallback_webarchive_url
 from bookmarks.type_defs import HttpRequest
 from bookmarks.views import access
-from bookmarks.services.ai_auto_tagger import is_ai_auto_tagging_enabled
 
 CJK_RE = re.compile(r"[\u4e00-\u9fff]+")
 

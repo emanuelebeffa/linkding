@@ -1,13 +1,10 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from django.test import TestCase, override_settings
-from django.contrib.auth.models import User
-
-from bookmarks.models import Bookmark, Tag
-from bookmarks.services.tasks import auto_tag_bookmark, _auto_tag_bookmark_task
-from bookmarks.tests.helpers import BookmarkFactoryMixin
-
 from huey.contrib.djhuey import HUEY as huey
+
+from bookmarks.services.tasks import _auto_tag_bookmark_task, auto_tag_bookmark
+from bookmarks.tests.helpers import BookmarkFactoryMixin
 
 
 class OpenAITaggerTaskTestCase(TestCase, BookmarkFactoryMixin):

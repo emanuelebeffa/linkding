@@ -26,6 +26,7 @@ from bookmarks.services.bookmarks import (
     delete_bookmarks,
     mark_bookmarks_as_read,
     mark_bookmarks_as_unread,
+    refresh_ai_tags,
     refresh_bookmarks_metadata,
     share_bookmarks,
     tag_bookmarks,
@@ -33,9 +34,6 @@ from bookmarks.services.bookmarks import (
     unarchive_bookmarks,
     unshare_bookmarks,
     untag_bookmarks,
-    refresh_bookmarks_metadata,
-    refresh_ai_tags,
-    create_html_snapshots,
 )
 from bookmarks.type_defs import HttpRequest
 from bookmarks.utils import get_safe_return_url
