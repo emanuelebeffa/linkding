@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("bookmarks", "0053_migrate_api_tokens"),
+        ("bookmarks", "0054_bookmarkbundle_filter_shared_and_more"),
     ]
 
     operations = [
